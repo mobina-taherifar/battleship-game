@@ -6,6 +6,7 @@ export function createGameBoard(){
     return{
         placeShip(ship, positions){
             ships.push(ship);
+
             positions.forEach(position => {
                 shipPositions.set(position, ship);
             });
@@ -19,16 +20,25 @@ export function createGameBoard(){
             attackedPositions.add(position);
 
             const ship = shipPositions.get(position);
+
             if(ship){
-                ship.hit()
-                return "Hit!"
+                ship.hit();
+                return "Hit!";
             }else{
-                return "Miss!"
+                return "Miss!";
             }
         },
 
         allShipsSunk(){
             return ships.every(ship => ship.isSunk());
+        },
+
+        hasShip(position){
+            return shipPositions.has(position);
+        },
+
+        hasBeenAttacked(position){
+            return attackedPositions.has(position);
         }
     }
 }
