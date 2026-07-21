@@ -3,39 +3,32 @@ import { createPlayer } from "./Player.js";
 export function createGameController(playerOneName){
     const playerOne = createPlayer(playerOneName, false);
     const playerTwo = createPlayer("Computer", true);
-
     let currentPlayer = playerOne;
     let winner = null;
-
-
     function computerTurn(){
-        const opponent = currentPlayer === playerOne 
-            ? playerTwo 
-            : playerOne;
-
+        const opponent = playerOne;
         const position = currentPlayer.getRandomAttack();
-
         const result = currentPlayer.attack(
             opponent.board,
             position
         );
 
-        console.log("Computer attacks:", position, result);
-
         if(opponent.board.allShipsSunk()){
             winner = currentPlayer;
-            return result;
+            return {
+                position,
+                result,
+                winner
+            };
         }
 
         switchTurn();
 
-        return result;
-    }
-
-    function switchTurn(){
-        currentPlayer = currentPlayer === playerOne 
-            ? playerTwo 
-            : playerOne;
+        return {
+            position,
+            result,
+            winner
+        };
     }
 
     return{
@@ -61,27 +54,38 @@ export function createGameController(playerOneName){
             );
 
             if(result === "Already attacked"){
-                return result;
+                return {
+                    result
+                };
             }
 
             if(opponent.board.allShipsSunk()){
                 winner = currentPlayer;
-                return result;
+
+                return {
+                    result,
+                    winner
+                };
             }
 
             switchTurn();
 
             if(currentPlayer.isComputer){
-                computerTurn();
+                return computerTurn();
             }
-
-            return result;
+            return {
+                result
+            };
         },
 
-        computerTurn,
-        switchTurn,
+        switchTurn(){
+            currentPlayer = currentPlayer === playerOne
+                ? playerTwo
+                : playerOne;
+        },
+
         isGameOver(){
             return winner !== null;
         }
-    }
+    };
 }

@@ -2,7 +2,6 @@ export function createGameBoard(){
     let ships = [];
     let shipPositions = new Map();
     let attackedPositions = new Set();
-
     return{
         placeShip(ship, positions){
             ships.push(ship);
@@ -39,6 +38,10 @@ export function createGameBoard(){
 
         hasBeenAttacked(position){
             return attackedPositions.has(position);
+        },
+
+        isPositionAvailable(position){
+            return !shipPositions.has(position);
         }
     }
 }
