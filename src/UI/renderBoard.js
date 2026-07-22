@@ -9,6 +9,8 @@ export function renderBoard(boardElement, gameboard, showShips, onCellClick = nu
             cell.dataset.position = `${rows[row]}${col}`;
             if(showShips && gameboard.hasShip(cell.dataset.position)){
                 cell.classList.add("ship");
+                    console.log("SHIP:", cell.dataset.position);
+
             };
 
             if(gameboard.hasBeenAttacked(cell.dataset.position)){
@@ -24,6 +26,8 @@ export function renderBoard(boardElement, gameboard, showShips, onCellClick = nu
                     onCellClick(cell.dataset.position);
                 });
             }
+
+            
             
             boardElement.appendChild(cell);
         }

@@ -131,3 +131,16 @@ body {
     box-shadow:
         inset 0 3px 8px rgba(0,0,0,.3);
 }
+
+.cell.ship {
+    background:#657786;
+}
+
+.cell.hit {
+    background:#d9534f;
+    position: relative;
+}
+
+.cell.miss {
+    background:#1e6f8f;
+}
