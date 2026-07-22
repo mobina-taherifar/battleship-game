@@ -24,7 +24,7 @@ export function createPlayer(name, isComputer){
             } while(computerAttacks.has(position));
 
             computerAttacks.add(position);
-
+            
             return position;
         }
     }

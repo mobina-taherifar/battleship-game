@@ -1,19 +1,20 @@
 import { renderBoard } from "./UI/renderBoard.js";
 import { createGameController } from "./game/GameController.js";
+import { setupShips } from "./game/setupShips.js";
 
 const playerBoardElement = document.querySelector("#player-board");
 const computerBoardElement = document.querySelector("#computer-board");
 
-const game = createGameController("Mobina");
+let game;
+let playerGameboard;
+let computerGameboard;
 
-const playerGameboard = game.playerOne.board;
-const computerGameboard = game.playerTwo.board;
-
-
-function handleAttack(position){
-    const result = game.playTurn(position);
-
-    console.log(result);
+function render() {
+    renderBoard(
+        playerBoardElement,
+        playerGameboard,
+        true
+    );
 
     renderBoard(
         computerBoardElement,
@@ -23,17 +24,21 @@ function handleAttack(position){
     );
 }
 
+function handleAttack(position) {
+    game.playTurn(position);
+    render();
+}
 
-renderBoard(
-    playerBoardElement,
-    playerGameboard,
-    true
-);
+function startGame() {
+    game = createGameController("Mobina");
 
+    playerGameboard = game.playerOne.board;
+    computerGameboard = game.playerTwo.board;
 
-renderBoard(
-    computerBoardElement,
-    computerGameboard,
-    false,
-    handleAttack
-);
+    setupShips(game.playerOne);
+    setupShips(game.playerTwo);
+
+    render();
+}
+
+startGame();
