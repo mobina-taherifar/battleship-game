@@ -6,6 +6,7 @@ import { setupShips } from "./game/setupShips.js";
 const playerBoardElement = document.querySelector("#player-board");
 const computerBoardElement = document.querySelector("#computer-board");
 const messageElement = document.querySelector("#game-message");
+const newGameButton = document.querySelector("#newgame-btn");
 
 let game;
 
@@ -16,6 +17,8 @@ function startGame(){
     setupShips(game.playerTwo);
 
     render();
+    computerBoardElement.style.pointerEvents = "auto";
+
     updateMessage({
         playerAttack: null,
         computerAttack: null,
@@ -73,5 +76,7 @@ function updateMessage(result){
 
     messageElement.textContent = message;
 }
+
+newGameButton.addEventListener("click", startGame);
 
 startGame();
