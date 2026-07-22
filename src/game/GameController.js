@@ -1,11 +1,14 @@
 import { createPlayer } from "./Player.js";
 
-export function createGameController(playerOneName){
+export function createGameController(playerOneName) {
     const playerOne = createPlayer(playerOneName, false);
     const playerTwo = createPlayer("Computer", true);
+
     let currentPlayer = playerOne;
     let winner = null;
-    function computerTurn(){
+
+
+    function computerTurn() {
         const opponent = playerOne;
         const position = currentPlayer.getRandomAttack();
         const result = currentPlayer.attack(
@@ -13,16 +16,9 @@ export function createGameController(playerOneName){
             position
         );
 
-        if(opponent.board.allShipsSunk()){
+        if (opponent.board.allShipsSunk()) {
             winner = currentPlayer;
-            return {
-                position,
-                result,
-                winner
-            };
         }
-
-        switchTurn();
 
         return {
             position,
@@ -31,60 +27,83 @@ export function createGameController(playerOneName){
         };
     }
 
-    return{
+    function switchTurn() {
+        currentPlayer = currentPlayer === playerOne
+            ? playerTwo
+            : playerOne;
+    }
+
+    return {
         playerOne,
         playerTwo,
 
-        getCurrentPlayer(){
+        getCurrentPlayer() {
             return currentPlayer;
         },
 
-        getWinner(){
+        getWinner() {
             return winner;
         },
 
-        playTurn(position){
-            const opponent = currentPlayer === playerOne 
-                ? playerTwo 
+        playTurn(position) {
+            const opponent = currentPlayer === playerOne
+                ? playerTwo
                 : playerOne;
 
-            const result = currentPlayer.attack(
+            const playerAttackResult = currentPlayer.attack(
                 opponent.board,
                 position
             );
 
-            if(result === "Already attacked"){
+            if (playerAttackResult === "Already attacked") {
                 return {
-                    result
+                    playerAttack: {
+                        position,
+                        result: playerAttackResult
+                    },
+                    computerAttack: null,
+                    winner
                 };
             }
 
-            if(opponent.board.allShipsSunk()){
+            if (opponent.board.allShipsSunk()) {
                 winner = currentPlayer;
-
                 return {
-                    result,
+                    playerAttack: {
+                        position,
+                        result: playerAttackResult
+                    },
+                    computerAttack: null,
                     winner
                 };
             }
 
             switchTurn();
 
-            if(currentPlayer.isComputer){
-                return computerTurn();
+            let computerAttack = null;
+
+            if (currentPlayer.isComputer) {
+                computerAttack = computerTurn();
+                if (!winner) {
+                    switchTurn();
+                }
             }
+
             return {
-                result
+                playerAttack: {
+                    position,
+                    result: playerAttackResult
+                },
+
+                computerAttack,
+
+                winner
             };
         },
 
-        switchTurn(){
-            currentPlayer = currentPlayer === playerOne
-                ? playerTwo
-                : playerOne;
-        },
+        switchTurn,
 
-        isGameOver(){
+        isGameOver() {
             return winner !== null;
         }
     };

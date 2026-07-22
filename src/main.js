@@ -2,43 +2,76 @@ import { renderBoard } from "./UI/renderBoard.js";
 import { createGameController } from "./game/GameController.js";
 import { setupShips } from "./game/setupShips.js";
 
+
 const playerBoardElement = document.querySelector("#player-board");
 const computerBoardElement = document.querySelector("#computer-board");
+const messageElement = document.querySelector("#game-message");
 
 let game;
-let playerGameboard;
-let computerGameboard;
 
-function render() {
-    renderBoard(
-        playerBoardElement,
-        playerGameboard,
-        true
-    );
-
-    renderBoard(
-        computerBoardElement,
-        computerGameboard,
-        false,
-        handleAttack
-    );
-}
-
-function handleAttack(position) {
-    game.playTurn(position);
-    render();
-}
-
-function startGame() {
+function startGame(){
     game = createGameController("Mobina");
-
-    playerGameboard = game.playerOne.board;
-    computerGameboard = game.playerTwo.board;
 
     setupShips(game.playerOne);
     setupShips(game.playerTwo);
 
     render();
+    updateMessage({
+        playerAttack: null,
+        computerAttack: null,
+        winner: null
+    });
+}
+
+function render(){
+    renderBoard(
+        playerBoardElement,
+        game.playerOne.board,
+        true
+    );
+
+    renderBoard(
+        computerBoardElement,
+        game.playerTwo.board,
+        false,
+        handleAttack
+    );
+}
+
+function handleAttack(position){
+    const result = game.playTurn(position);
+    updateMessage(result);
+    render();
+
+    if(result.winner){
+        computerBoardElement.style.pointerEvents = "none";
+    }
+}
+
+function updateMessage(result){
+    if(result.winner){
+        if(result.winner === game.playerOne){
+            messageElement.textContent = "You win!";
+        }
+        else{
+            messageElement.textContent = "You lost:(";
+        }
+        return;
+    }
+
+    let message = "";
+
+    if(result.playerAttack){
+        message +=
+        `You attacked ${result.playerAttack.position}: ${result.playerAttack.result}`;
+    }
+
+    if(result.computerAttack){
+        message +=
+        ` | Computer attacked ${result.computerAttack.position}: ${result.computerAttack.result}`;
+    }
+
+    messageElement.textContent = message;
 }
 
 startGame();
