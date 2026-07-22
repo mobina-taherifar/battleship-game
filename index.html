@@ -3,9 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+    <title>Battleship</title>
+    <link rel="stylesheet" href="/src/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet"></head>
 <body>
-    <script type="module" src="/src/main.js"></script>
+    <main>
+        <section class="game-boards">
+            <div class="board-container">
+                <div id="commander-info">
+                    <img src="src/assets/images/commander.png" alt="">
+                    <h2>You</h2>
+                </div>
+                <div id="player-board"></div>
+            </div>
+
+            <div class="board-container">
+                <div id="enemy-info">
+                    <img src="src/assets/images/enemy.png" alt="">
+                    <h2>Enemy</h2>
+                </div>
+                <div id="computer-board"></div>
+            </div>
+        </section>
+    </main>
+    <div id="game-message"></div>
+    <button id="newgame-btn">New Game</button>
+    <script type="module" src="./src/main.js"></script>
 </body>
 </html>
